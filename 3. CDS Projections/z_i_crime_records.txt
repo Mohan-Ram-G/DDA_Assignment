@@ -1,0 +1,29 @@
+@EndUserText.label: 'CDS Projection for Crime Records'
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@Metadata.allowExtensions: true
+define view entity Z_I_CRIME_RECORDS
+  as projection on Z_C_crime_records
+{
+  key CRecordsUUID,
+      ComplaintUUID,
+      CaseId,
+      ComplaintId,
+      CriminalId,
+      CrimeId,
+      CriminalName,
+      CType,
+      CRemarks,
+      CourtId,
+      CourtName,
+      PoliceId,
+      PoliceName,
+      Remarks,
+      LastChangedAt,
+      LocalLastChangedAt,
+      /* Associations */
+      _complaint : redirected to parent Z_I_COMPLAINT,
+      _court,
+      _crime,
+      _criminal,
+      _police
+}

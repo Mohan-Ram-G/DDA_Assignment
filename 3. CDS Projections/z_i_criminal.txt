@@ -1,0 +1,17 @@
+@EndUserText.label: 'CDS Projection for Criminal'
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@Metadata.allowExtensions: true
+define root view entity Z_I_CRIMINAL as projection on z_c_criminal
+{
+    key CriminalUUID,
+    CriminalId,
+    Name,
+    Dob,
+    Age,
+    Contactno,
+    Location,
+    LastChangedAt,
+    LocalLastChangedAt,
+    /* Associations */
+    _crime_records : redirected to composition child z_i_criminal_cases
+}

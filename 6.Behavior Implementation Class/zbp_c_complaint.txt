@@ -1,0 +1,160 @@
+CLASS zbp_c_complaint DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF z_c_complaint.
+ENDCLASS.
+
+CLASS zbp_c_complaint IMPLEMENTATION.
+ENDCLASS.
+CLASS lhc_crime_records DEFINITION INHERITING FROM cl_abap_behavior_handler.
+
+  PRIVATE SECTION.
+
+    METHODS create_case FOR DETERMINE ON SAVE
+      IMPORTING keys FOR crime_records~create_case.
+
+ENDCLASS.
+
+CLASS lhc_crime_records IMPLEMENTATION.
+
+  METHOD create_case.
+    DATA: lt_ucrime TYPE TABLE FOR UPDATE z_c_complaint\\crime_records.
+*    DATA update TYPE TABLE FOR UPDATE Z_C_crime_records.
+    SELECT SINGLE MAX( caseid )
+    FROM Z_C_crime_records
+    INTO @DATA(lv_maxcase).
+    READ ENTITIES OF z_c_complaint IN LOCAL MODE
+        ENTITY crime_records BY  \_complaint
+        FIELDS ( ComplaintUUID ComplaintId CaseId Remarks )
+        WITH CORRESPONDING #( keys )
+        RESULT DATA(lt_comp).
+    LOOP AT lt_comp ASSIGNING FIELD-SYMBOL(<fs_comp>).
+      DATA(lv_index) = sy-tabix.
+      READ ENTITIES OF z_c_complaint IN LOCAL MODE
+        ENTITY complaint BY \_crime_records
+          FIELDS ( CaseId )
+        WITH VALUE #( ( %tky = <fs_comp>-%tky ) )
+        RESULT DATA(lt_crime).
+      DELETE lt_crime WHERE CaseId IS NOT INITIAL.
+      LOOP AT lt_crime ASSIGNING FIELD-SYMBOL(<fs_crime>).
+        IF <fs_comp>-CaseId IS INITIAL.
+          lv_maxcase = 'CA' && CONV znumc06( lv_maxcase+2 + 1 ).
+          <fs_crime>-CaseId = <fs_comp>-CaseId =  lv_maxcase.
+          CLEAR: lv_index.
+        ELSE.
+          <fs_crime>-CaseId = <fs_comp>-CaseId.
+        ENDIF.
+        <fs_crime>-ComplaintId = <fs_comp>-ComplaintId.
+        <fs_crime>-ComplaintUUID = <fs_comp>-ComplaintUUID.
+        IF <fs_crime>-Remarks IS INITIAL.
+          <fs_crime>-Remarks = <fs_comp>-Remarks.
+        ENDIF.
+        APPEND VALUE #( %tky      = <fs_crime>-%tky
+                        caseid = <fs_crime>-caseid
+                        ComplaintId = <fs_comp>-ComplaintId
+                        ComplaintUUID = <fs_comp>-ComplaintUUID
+                        Remarks = <fs_comp>-Remarks
+                      ) TO lt_ucrime.
+      ENDLOOP.
+      IF lv_index IS NOT INITIAL.
+        DELETE lt_comp INDEX lv_index.
+      ENDIF.
+      CLEAR: lv_index.
+    ENDLOOP.
+    MODIFY ENTITIES OF z_c_complaint IN LOCAL MODE
+    ENTITY crime_records
+      UPDATE FIELDS ( CaseId ComplaintId ComplaintUUID Remarks ) WITH lt_ucrime
+    REPORTED DATA(update_reported).
+    IF lt_comp IS NOT INITIAL.
+      MODIFY ENTITIES OF z_c_complaint IN LOCAL MODE
+   ENTITY complaint
+     UPDATE FIELDS ( CaseId ) WITH VALUE #( FOR ls_comp IN lt_comp
+                                          ( %tky = ls_comp-%tky
+                                            CaseId = ls_comp-CaseId ) )
+   REPORTED DATA(lt_update_reported).
+    ENDIF.
+
+    reported = CORRESPONDING #( DEEP update_reported ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS lhc_complaint DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+
+
+
+    METHODS create_complaint FOR DETERMINE ON SAVE
+      IMPORTING keys FOR complaint~create_complaint.
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
+      IMPORTING keys REQUEST requested_authorizations FOR complaint RESULT result.
+
+ENDCLASS.
+
+CLASS lhc_complaint IMPLEMENTATION.
+
+  METHOD create_complaint.
+    " check if TravelID is already filled
+    READ ENTITIES OF z_c_complaint IN LOCAL MODE
+      ENTITY complaint
+        FIELDS ( ComplaintId ) WITH CORRESPONDING #( keys )
+      RESULT DATA(lt_complaint).
+
+    " remove lines where TravelID is already filled.
+    DELETE lt_complaint WHERE ComplaintId IS NOT INITIAL.
+    IF lt_complaint IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    " Select max travel ID
+    SELECT SINGLE MAX( ComplaintId ) AS complaint_id
+        FROM  z_c_complaint
+        INTO @DATA(lv_maxcomplaint).
+    SELECT SINGLE * FROM z_c_user_records
+    WHERE UserId = @sy-uname
+    INTO @DATA(ls_user_record).
+    LOOP AT lt_complaint ASSIGNING FIELD-SYMBOL(<fs_comp>).
+      <fs_comp>-ComplaintId = 'CM' && CONV znumc06( lv_maxcomplaint+2   + sy-tabix ).
+      <fs_comp>-UserId = sy-uname.
+      <fs_comp>-Username = ls_user_record-Name.
+      IF <fs_comp>-Victimname IS INITIAL.
+        <fs_comp>-Victimname = ls_user_record-Name.
+      ENDIF.
+      IF <fs_comp>-Contactno IS INITIAL.
+        <fs_comp>-Contactno = ls_user_record-Contactno.
+      ENDIF.
+      IF <fs_comp>-Location IS INITIAL AND <fs_comp>-Postalcode IS INITIAL.
+        <fs_comp>-Location = ls_user_record-Location.
+        <fs_comp>-Postalcode = ls_user_record-Postalcode.
+      ENDIF.
+      IF <fs_comp>-Emailid IS INITIAL.
+        <fs_comp>-Emailid = ls_user_record-Emailid.
+      ENDIF.
+    ENDLOOP.
+
+    " Set the travel ID
+    MODIFY ENTITIES OF z_c_complaint IN LOCAL MODE
+    ENTITY complaint
+      UPDATE
+        FROM VALUE #( FOR complaint IN lt_complaint (
+          %tky              = complaint-%tky
+          ComplaintId          = complaint-ComplaintId
+          %control-ComplaintId = if_abap_behv=>mk-on
+          UserId          = complaint-UserId
+          %control-UserId = if_abap_behv=>mk-on
+          Victimname = complaint-Victimname
+          %control-Victimname = if_abap_behv=>mk-on
+          Contactno = complaint-Contactno
+          %control-Contactno = if_abap_behv=>mk-on
+          Location = complaint-Location
+          %control-Location = if_abap_behv=>mk-on
+          Postalcode = complaint-Postalcode
+          %control-Postalcode = if_abap_behv=>mk-on
+          Emailid = complaint-Emailid
+          %control-Emailid = if_abap_behv=>mk-on ) )
+          MAPPED DATA(mapped)
+    REPORTED DATA(update_reported).
+    reported = CORRESPONDING #( DEEP update_reported ).
+  ENDMETHOD.
+
+  METHOD get_instance_authorizations.
+  ENDMETHOD.
+
+ENDCLASS.

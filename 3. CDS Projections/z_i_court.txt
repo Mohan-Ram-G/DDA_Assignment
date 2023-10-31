@@ -1,0 +1,16 @@
+@EndUserText.label: 'CDS Projection for Court'
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@Metadata.allowExtensions: true
+define root view entity Z_I_COURT
+  as projection on z_c_court
+{
+  key CourtUUID,
+      CourtId,
+      Name,
+      Location,
+      Postalcode,
+      Emailid,
+      Contactno,
+      LastChangedAt,
+      LocalLastChangedAt
+}

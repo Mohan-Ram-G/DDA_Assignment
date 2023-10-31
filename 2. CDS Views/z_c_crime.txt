@@ -1,0 +1,26 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS for Crime'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define root view entity z_c_crime
+  as select from zcrime
+{
+  key crime_uuid            as CrimeUUID,
+      @EndUserText.label: 'Crime ID'
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIME', element: 'CrimeId'  } }]
+      crime_id              as CrimeId,
+      @EndUserText.label: 'Crime Type'
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIME', element: 'Name'  } }]
+      name                  as Name,
+      @EndUserText.label: 'Crime Details'
+      remarks               as Remarks,
+      @Semantics.systemDateTime.lastChangedAt: true
+      last_changed_at       as LastChangedAt,
+      @Semantics.systemDateTime.localInstanceLastChangedAt: true
+      local_last_changed_at as LocalLastChangedAt
+}

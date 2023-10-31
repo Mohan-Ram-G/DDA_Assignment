@@ -1,0 +1,63 @@
+@Metadata.layer: #CORE
+
+@UI: {
+    headerInfo: {
+        typeName: 'Crime Record',
+        typeNamePlural: 'Crime Records',
+        title: {
+            type: #STANDARD,
+            label: 'Case ID:',
+            value: 'CaseId'
+        },
+        description: {
+            value: 'LastChangedAt'
+        }
+    }
+}
+annotate view Z_I_CRIME_RECORDS with
+{
+
+  @UI.facet: [ { id:              'CrimeRecords',
+                 purpose:         #STANDARD,
+                 type:            #IDENTIFICATION_REFERENCE,
+                 label:           'Crime Details',
+                 position:        10 } ]
+  @UI.hidden: true
+  CRecordsUUID;
+  @UI.hidden: true
+  ComplaintUUID;
+  @UI: { lineItem:       [ { position: 10 } ],
+         identification: [{ position: 10 }],
+         selectionField: [{ position: 10 }] }
+  CaseId;
+  @UI: { lineItem:       [ { position: 20 } ],
+         identification: [{ position: 20 }] }
+  ComplaintId;
+  @UI: { lineItem:       [ { position: 30 } ],
+         identification: [{ position: 30, label: 'Criminal ID' }] }
+  CriminalId;
+  @UI: { identification: [{ position: 40, label: 'Crime ID' }] }
+  CrimeId;
+  @UI: { lineItem:       [ { position: 40 } ],
+         selectionField: [{ position: 20 }] }
+  CType;
+  @UI: { selectionField: [{ position: 30 }] }
+  CriminalName;
+  @UI: { lineItem:       [ { position: 50 } ],
+         identification: [{ position: 60, label: 'Court ID' }] }
+  CourtId;
+  @UI: { selectionField: [{ position: 70 }] }
+  CourtName;
+  @UI: { lineItem:       [ { position: 60 } ],
+         identification: [{ position: 80, label: 'Police ID' }] }
+  PoliceId;
+  @UI: { selectionField: [{ position: 50 }] }
+  PoliceName;
+  @UI: { lineItem:       [ { position: 70 } ],
+         identification: [{ position: 100 }] }
+  Remarks;
+  @UI: { selectionField: [{ position: 60 }] }
+  LastChangedAt;
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

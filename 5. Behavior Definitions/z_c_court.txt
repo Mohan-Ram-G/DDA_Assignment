@@ -1,0 +1,34 @@
+managed implementation in class zbp_c_court unique;
+strict ( 2 );
+
+define behavior for z_c_court alias court
+persistent table zcourt
+etag master LocalLastChangedAt
+lock master authorization master ( instance )
+{
+
+  field ( numbering : managed, readonly )
+  CourtUUID;
+
+  field ( readonly )
+  CourtId;
+
+  create;
+  update;
+  delete;
+
+  mapping for zcourt
+    {
+      CourtUUID          = court_uuid;
+      CourtId            = court_id;
+      Name               = name;
+      Location           = location;
+      Postalcode         = postalcode;
+      Emailid            = emailid;
+      Contactno          = contactno;
+      LastChangedAt      = last_changed_at;
+      LocalLastChangedAt = local_last_changed_at;
+    }
+
+  determination create_court on save { create; }
+}

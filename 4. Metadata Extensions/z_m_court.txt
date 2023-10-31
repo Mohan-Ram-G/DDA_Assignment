@@ -1,0 +1,52 @@
+@Metadata.layer: #CORE
+
+@UI: {
+    headerInfo: {
+        typeName: 'Court',
+        typeNamePlural: 'Courts',
+        title: {
+            type: #STANDARD,
+            label: 'Court ID:',
+            value: 'CourtId'
+        },
+        description: {
+            value: 'LastChangedAt'
+        }
+    }
+}
+annotate view Z_I_COURT with
+{
+
+  @UI.facet: [ { id:              'Court',
+                 purpose:         #STANDARD,
+                 type:            #IDENTIFICATION_REFERENCE,
+                 label:           'Court Details',
+                 position:        10 } ]
+  @UI.hidden: true
+  CourtUUID;
+  @UI: { lineItem:       [ { position: 10 } ],
+         identification: [{ position: 10 }],
+         selectionField: [{position: 10 }] }
+  CourtId;
+  @UI: { lineItem:       [ { position: 20 } ],
+         identification: [{ position: 20 }],
+         selectionField: [{position: 30 }] }
+  Name;
+  @UI: { lineItem:       [ { position: 30 } ],
+         identification: [{ position: 30 }] }
+  Location;
+  @UI: { lineItem:       [ { position: 40 } ],
+         identification: [{ position: 40 }],
+         selectionField: [{position: 30 }] }
+  Postalcode;
+  @UI: { lineItem:       [ { position: 50 } ],
+         identification: [{ position: 50 }] }
+  Emailid;
+  @UI: { lineItem:       [ { position: 60 } ],
+         identification: [{ position: 60 }] }
+  Contactno;
+  @UI.hidden: true
+  LastChangedAt;
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

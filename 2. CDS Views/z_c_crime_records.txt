@@ -1,0 +1,68 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS for Crime Records'
+@Metadata.allowExtensions: true
+@ObjectModel.semanticKey: [ 'CaseId' ]
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity Z_C_crime_records
+  as select from zcrime_records
+  association        to parent Z_C_COMPLAINT as _complaint on $projection.ComplaintUUID = _complaint.ComplaintUUID
+  association [0..1] to z_c_crime            as _crime     on $projection.CrimeId = _crime.CrimeId
+  association [0..*] to z_c_criminal         as _criminal  on $projection.CriminalId = _criminal.CriminalId
+  association [0..1] to z_c_court            as _court     on $projection.CourtId = _court.CourtId
+  association [0..1] to z_c_police           as _police    on $projection.PoliceId = _police.PoliceId
+{
+  key crecords_uuid                                    as CRecordsUUID,
+      complaint_uuid                                   as ComplaintUUID,
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIME_RECORDS', element: 'CaseId'  } }]
+      case_id                                          as CaseId,
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_COMPLAINT', element: 'ComplaintId'  } }]
+      compliant_id                                     as ComplaintId,
+      @EndUserText.label: 'Criminal Name'
+      @ObjectModel.text.element: ['CriminalName']
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIMINAL', element: 'CriminalId'  } }]
+      criminal_id                                      as CriminalId,
+      @ObjectModel.text.element: ['CRemarks']
+      @EndUserText.label: 'Crime Name'
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIME', element: 'CrimeId'  } }]
+      crime_id                                         as CrimeId,
+      @EndUserText.label: 'Criminal Name'
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIMINAL', element: 'Name'  } }]
+      _criminal.Name                                   as CriminalName,
+      @EndUserText.label: 'Crime Type'
+      @ObjectModel.text.element: ['CRemarks']
+      concat_with_space( _crime.CrimeId,
+      concat_with_space( '-', _crime.Remarks, 1 ), 1 ) as CType,
+      @EndUserText.label: 'Crime Type'
+      _crime.Name                                      as CRemarks,
+      @ObjectModel.text.element: ['CourtName']
+      @EndUserText.label: 'Court Name'
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_COURT', element: 'CourtId'  } }]
+      court_id                                         as CourtId,
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_COURT', element: 'Name'  } }]
+      @EndUserText.label: 'Court Name'
+      _court.Name                                      as CourtName,
+      @EndUserText.label: 'Police Name'
+      @ObjectModel.text.element: ['PoliceName']
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_POLICE', element: 'PoliceId'  } }]
+      police_id                                        as PoliceId,
+      @EndUserText.label: 'Police Name'
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_POLICE', element: 'Name'  } }]
+      _police.Name                                     as PoliceName,
+      @EndUserText.label: 'Case Details'
+      remarks                                          as Remarks,
+      @Semantics.systemDateTime.lastChangedAt: true
+      last_changed_at                                  as LastChangedAt,
+      @Semantics.systemDateTime.localInstanceLastChangedAt: true
+      local_last_changed_at                            as LocalLastChangedAt,
+      _complaint,
+      _crime,
+      _criminal,
+      _court,
+      _police
+}

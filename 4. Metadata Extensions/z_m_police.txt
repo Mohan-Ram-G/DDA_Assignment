@@ -1,0 +1,51 @@
+@Metadata.layer: #CORE
+
+@UI: {
+    headerInfo: {
+        typeName: 'Police',
+        typeNamePlural: 'Police',
+        title: {
+            type: #STANDARD,
+            label: 'Polie ID:',
+            value: 'PoliceId'
+        },
+        description: {
+            value: 'LastChangedAt'
+        }
+    }
+}
+annotate view Z_I_POLICE with
+{
+  @UI.facet: [ { id:              'Police',
+                 purpose:         #STANDARD,
+                 type:            #IDENTIFICATION_REFERENCE,
+                 label:           'Police Details',
+                 position:        10 } ]
+  @UI.hidden: true
+  PoliceUUID;
+  @UI: { lineItem:       [ { position: 10 } ],
+         identification: [{ position: 10 }] }
+  PoliceId;
+  @UI: { lineItem:       [ { position: 20 } ],
+         identification: [{ position: 20 }] }
+  Name;
+  @UI: { lineItem:       [ { position: 30 } ],
+         identification: [{ position: 30 }] }
+  Role;
+  @UI.hidden: true
+  StationUUID;
+  @UI.hidden: true
+  StationId;
+  @UI: { lineItem:       [ { position: 40 } ],
+         identification: [{ position: 40 }] }
+  Emailid;
+  @UI: { lineItem:       [ { position: 50 } ],
+         identification: [{ position: 50 }] }
+  Contactno;
+  @UI.hidden: true
+  LastChangedAt;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  //  /* Associations */
+  //  _police_station;
+}

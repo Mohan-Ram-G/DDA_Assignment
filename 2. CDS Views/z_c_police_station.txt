@@ -1,0 +1,23 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS for Police Station'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity z_c_police_station
+  as select from zpolice_station
+{
+  key station_id            as StationId,
+      name                  as Name,
+      location              as Location,
+      postalcode            as Postalcode,
+      emailid               as Emailid,
+      contactno             as Contactno,
+      @Semantics.systemDateTime.lastChangedAt: true
+      last_changed_at       as LastChangedAt,
+      @Semantics.systemDateTime.localInstanceLastChangedAt: true
+      local_last_changed_at as LocalLastChangedAt
+}

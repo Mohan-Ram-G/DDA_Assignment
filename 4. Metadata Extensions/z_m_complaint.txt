@@ -1,0 +1,73 @@
+@Metadata.layer: #CORE
+
+@UI: {
+    headerInfo: {
+        typeName: 'Complaint',
+        typeNamePlural: 'Complaints',
+        title: {
+            type: #STANDARD,
+            label: 'Complaint ID:',
+            value: 'ComplaintId'
+        },
+        description: {
+            value: 'LastChangedAt'
+        }
+    }
+}
+
+annotate view Z_I_COMPLAINT with
+{
+  @UI.facet: [ { id:              'Complaint',
+                 purpose:         #STANDARD,
+                 type:            #IDENTIFICATION_REFERENCE,
+                 label:           'Complaint Details',
+                 position:        10 },
+               { id:              'CriminalRecords',
+                 purpose:         #STANDARD,
+                 type:            #LINEITEM_REFERENCE,
+                 label:           'Criminal Records',
+                 position:        20,
+                 targetElement:   '_crime_records'} ]
+  @UI.hidden: true
+  ComplaintUUID;
+  @UI: { lineItem:       [ { position: 10 } ],
+         identification: [{ position: 10 }],
+         selectionField: [{position: 10 }] }
+  ComplaintId;
+  @UI: { lineItem:       [ { position: 20 } ],
+         identification: [{ position: 20 }] }
+  UserId;
+  @UI: { selectionField: [{ position: 20 }] }
+  Username;
+  @UI: { lineItem:       [ { position: 30 } ],
+         identification: [{ position: 30 }],
+         selectionField: [ { position: 30 }] }
+  Victimname;
+  @UI: { lineItem:       [ { position: 40 } ],
+         identification: [{ position: 40 }],
+         selectionField: [{position: 40 }] }
+  CaseId;
+  @UI: { lineItem:       [ { position: 50 } ],
+         identification: [{ position: 50 }] }
+  Remarks;
+  @UI: { lineItem:       [ { position: 60 } ],
+         identification: [{ position: 60 }] }
+  Location;
+  @UI: { lineItem:       [ { position: 70 } ],
+         identification: [{ position: 70 }] }
+  Postalcode;
+  @UI: { lineItem:       [ { position: 80 } ],
+         identification: [{ position: 80 }] }
+  Emailid;
+  @UI: { lineItem:       [ { position: 90 } ],
+         identification: [{ position: 90 }] }
+  Contactno;
+  @UI.selectionField: [{ position: 50 }]
+  LastChangedAt;
+  @UI.hidden: true
+  LocalLastChangedAt;
+  //    /* Associations */
+  //    _crime_records;
+  //    _user_records;
+
+}

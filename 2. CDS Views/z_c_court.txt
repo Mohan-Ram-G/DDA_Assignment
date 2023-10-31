@@ -1,0 +1,27 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS for Court'
+@Metadata.allowExtensions: true
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define root view entity z_c_court
+  as select from zcourt
+{
+  key court_uuid            as CourtUUID,
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_COURT', element: 'CourtId'  } }]
+      court_id              as CourtId,
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_COURT', element: 'Name'  } }]
+      name                  as Name,
+      location              as Location,
+      postalcode            as Postalcode,
+      emailid               as Emailid,
+      contactno             as Contactno,
+      @Semantics.systemDateTime.lastChangedAt: true
+      last_changed_at       as LastChangedAt,
+      @Semantics.systemDateTime.localInstanceLastChangedAt: true
+      local_last_changed_at as LocalLastChangedAt
+}

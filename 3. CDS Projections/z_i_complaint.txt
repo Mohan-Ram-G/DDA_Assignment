@@ -1,0 +1,23 @@
+@EndUserText.label: 'CDS Projection for Complaint'
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@Metadata.allowExtensions: true
+define root view entity Z_I_COMPLAINT
+  as projection on Z_C_COMPLAINT
+{
+  key ComplaintUUID,
+      ComplaintId,
+      CaseId,
+      UserId,
+      Username,
+      Victimname,
+      Remarks,
+      Location,
+      Postalcode,
+      Emailid,
+      Contactno,
+      LastChangedAt,
+      LocalLastChangedAt,
+      /* Associations */
+      _crime_records : redirected to composition child Z_I_CRIME_RECORDS,
+      _user_records
+}

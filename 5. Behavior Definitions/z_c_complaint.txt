@@ -1,0 +1,68 @@
+managed implementation in class zbp_c_complaint unique;
+strict ( 2 );
+define behavior for Z_C_COMPLAINT alias complaint
+persistent table zcomplaint
+etag master LocalLastChangedAt
+lock master authorization master ( instance )
+{
+  field ( numbering : managed, readonly )
+  ComplaintUUID;
+
+  field ( readonly )
+  ComplaintId, CaseId, UserId;
+  create;
+  update;
+  delete;
+
+  mapping for zcomplaint
+    {
+      ComplaintUUID      = complaint_uuid;
+      ComplaintId        = complaint_id;
+      CaseId             = case_id;
+      UserId             = user_id;
+      Victimname         = victimname;
+      Remarks            = remarks;
+      Location           = location;
+      Postalcode         = postalcode;
+      Emailid            = emailid;
+      Contactno          = contactno;
+      LastChangedAt      = last_changed_at;
+      LocalLastChangedAt = local_last_changed_at;
+    }
+
+  association _crime_records { create; }
+  determination create_complaint on save { create; }
+}
+
+define behavior for Z_C_crime_records alias crime_records
+persistent table zcrime_records
+lock dependent by _complaint
+authorization dependent by _complaint
+etag master LocalLastChangedAt
+{
+  update;
+  delete;
+  field ( numbering : managed, readonly )
+  CRecordsUUID;
+
+  field ( readonly )
+  ComplaintUUID, CaseId, ComplaintId;
+
+  mapping for zcrime_records
+    {
+      CRecordsUUID       = crecords_uuid;
+      ComplaintUUID      = complaint_uuid;
+      CaseId             = case_id;
+      CriminalId         = criminal_id;
+      ComplaintId        = compliant_id;
+      CrimeId            = crime_id;
+      CourtId            = court_id;
+      PoliceId           = police_id;
+      Remarks            = remarks;
+      LastChangedAt      = last_changed_at;
+      LocalLastChangedAt = local_last_changed_at;
+    }
+
+  association _complaint;
+  determination create_case on save { create; }
+}

@@ -1,0 +1,33 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS for Criminal'
+@Metadata.allowExtensions: true
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define root view entity z_c_criminal
+  as select from zcriminal
+  composition [0..*] of z_c_criminal_cases as _crime_records
+{
+  key criminal_uuid                                        as CriminalUUID,
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIMINAL', element: 'CriminalId'  } }]
+      criminal_id                                          as CriminalId,
+      @EndUserText.label: 'Criminal Name'
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIMINAL', element: 'Name'  } }]
+      name                                                 as Name,
+      @EndUserText.label: 'Date of Birth'
+      dob                                                  as Dob,
+      @EndUserText.label: 'Age'
+      //      age                   as Age,
+      div(dats_days_between(dob,$session.system_date),365) as Age,
+      contactno                                            as Contactno,
+      location                                             as Location,
+      @Semantics.systemDateTime.lastChangedAt: true
+      last_changed_at                                      as LastChangedAt,
+      @Semantics.systemDateTime.localInstanceLastChangedAt: true
+      local_last_changed_at                                as LocalLastChangedAt,
+      _crime_records
+}

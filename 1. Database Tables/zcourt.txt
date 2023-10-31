@@ -1,0 +1,19 @@
+@EndUserText.label : 'Court_2022MT9301'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table zcourt {
+
+  key client            : abap.clnt not null;
+  key court_uuid        : sysuuid_x16 not null;
+  court_id              : zcourt_id not null;
+  name                  : /dmo/title;
+  location              : /dmo/street;
+  postalcode            : /dmo/postal_code;
+  emailid               : /dmo/email_address;
+  contactno             : /dmo/phone_number;
+  last_changed_at       : abp_lastchange_tstmpl;
+  local_last_changed_at : abp_locinst_lastchange_tstmpl;
+
+}

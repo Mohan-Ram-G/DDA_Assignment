@@ -1,0 +1,47 @@
+managed implementation in class zbp_c_criminal unique;
+strict ( 2 );
+
+define behavior for z_c_criminal alias Criminal
+persistent table zcriminal
+etag master LocalLastChangedAt
+lock master authorization master ( instance )
+{
+  field ( numbering : managed, readonly )
+  CriminalUUID;
+
+  field ( readonly )
+  CriminalId, Age;
+
+  create;
+  update;
+  delete;
+
+  mapping for zcriminal
+    {
+      CriminalUUID       = criminal_uuid;
+      CriminalId         = criminal_id;
+      Name               = name;
+      Dob                = dob;
+      Contactno          = contactno;
+      Location           = location;
+      LastChangedAt      = last_changed_at;
+      LocalLastChangedAt = local_last_changed_at;
+    }
+
+  association _crime_records { create; }
+  determination create_criminal on save { create; }
+}
+
+define behavior for z_c_criminal_cases alias CriminalCases
+persistent table zcrime_records
+lock dependent by _criminal
+authorization dependent by _criminal
+etag master LocalLastChangedAt
+{
+//  field ( numbering : managed, readonly )
+//  CrecordsUuid;
+
+  field ( readonly ) CriminalUUID, CrecordsUuid;
+
+  association _criminal;
+}

@@ -1,0 +1,55 @@
+@Metadata.layer: #CORE
+
+@UI: {
+    headerInfo: {
+        typeName: 'Criminal''s Case',
+        typeNamePlural: 'Criminal''s Cases',
+        title: {
+            type: #STANDARD,
+            label: 'Criminal''s Cases',
+            value: 'CaseId'
+        },
+        description: {
+            value: 'LastChangedAt'
+        }
+    }
+}
+annotate view z_i_criminal_cases with
+{
+
+  @UI.facet: [ { id:              'CrimeRecords',
+                 purpose:         #STANDARD,
+                 type:            #IDENTIFICATION_REFERENCE,
+                 label:           'Crime Details',
+                 position:        10 } ]
+  @UI.hidden: true
+  CrecordsUuid;
+  @UI.hidden: true
+  ComplaintUuid;
+  @UI: { lineItem:       [ { position: 10 } ] }
+  CaseId;
+  @UI: { lineItem:       [ { position: 20 } ] }
+  ComplaintId;
+  @UI.hidden: true
+  //  @UI: { identification: [{ position: 30, label: 'Criminal ID' }] }
+  CriminalId;
+  @UI.hidden: true
+  //  @UI: { identification: [{ position: 40, label: 'Crime ID' }] }
+  CrimeId;
+  @UI: { lineItem:       [ { position: 40 } ] }
+  CType;
+  @UI: { lineItem:       [ { position: 50 } ] }
+  CourtId;
+  @UI.hidden: true
+  CourtName;
+  @UI: { lineItem:       [ { position: 60 } ] }
+  PoliceId;
+  @UI.hidden: true
+  PoliceName;
+  @UI: { lineItem:       [ { position: 70 } ] }
+  Remarks;
+  @UI.hidden: true
+  LastChangedAt;
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

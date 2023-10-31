@@ -1,0 +1,43 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS for Compliant'
+@Metadata.allowExtensions: true
+@ObjectModel.semanticKey: [ 'ComplaintId' ]
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define root view entity Z_C_COMPLAINT
+  as select from zcomplaint
+  composition [0..*] of Z_C_crime_records as _crime_records
+  association [0..1] to z_c_user_records  as _user_records on $projection.UserId = _user_records.UserId
+{
+  key complaint_uuid        as ComplaintUUID,
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_COMPLAINT', element: 'ComplaintId'  } }]
+      complaint_id          as ComplaintId,
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIME_RECORDS', element: 'CaseId'  } }]
+      case_id               as CaseId,
+      @EndUserText.label: 'Complainant Name'
+      @ObjectModel.text.element: ['Username']
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_USER_RECORDS', element: 'UserId'  } }]
+      user_id               as UserId,
+      @EndUserText.label: 'Complainant Name'
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_USER_RECORDS', element: 'Name'  } }]
+      _user_records.Name    as Username,
+      @EndUserText.label: 'Victim Name'
+      victimname            as Victimname,
+      @EndUserText.label: 'Complaint Details'
+      remarks               as Remarks,
+      location              as Location,
+      postalcode            as Postalcode,
+      emailid               as Emailid,
+      contactno             as Contactno,
+      @Semantics.systemDateTime.lastChangedAt: true
+      last_changed_at       as LastChangedAt,
+      @Semantics.systemDateTime.localInstanceLastChangedAt: true
+      local_last_changed_at as LocalLastChangedAt,
+      _crime_records,
+      _user_records
+}

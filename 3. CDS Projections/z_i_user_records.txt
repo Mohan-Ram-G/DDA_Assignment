@@ -1,0 +1,16 @@
+@EndUserText.label: 'CDS Projection for User Records'
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@Metadata.allowExtensions: true
+define root view entity Z_I_USER_RECORDS
+  as projection on z_c_user_records
+{
+  key UserUUID,
+      UserId,
+      Name,
+      Location,
+      Postalcode,
+      Emailid,
+      Contactno,
+      LastChangedAt,
+      LocalLastChangedAt
+}

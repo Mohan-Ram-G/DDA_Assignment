@@ -1,0 +1,61 @@
+@Metadata.layer: #CORE
+
+@UI: {
+    headerInfo: {
+        typeName: 'Criminal',
+        typeNamePlural: 'Criminals',
+        title: {
+            type: #STANDARD,
+            label: 'Criminal ID:',
+            value: 'CriminalId'
+        },
+        description: {
+            value: 'LastChangedAt'
+        }
+    }
+}
+annotate view Z_I_CRIMINAL with
+{
+  @UI.facet: [ { id:              'Criminal',
+                 purpose:         #STANDARD,
+                 type:            #IDENTIFICATION_REFERENCE,
+                 label:           'Criminal Details',
+                 position:        10 },
+               { id:              'CriminalCases',
+                 purpose:         #STANDARD,
+                 type:            #LINEITEM_REFERENCE,
+                 label:           'Criminal Cases',
+                 position:        20,
+                 targetElement:   '_crime_records'} ]
+  @UI.hidden: true
+  CriminalUUID;
+  @UI: { lineItem:       [ { position: 10 } ],
+         identification: [{ position: 10 }],
+         selectionField: [{position: 10 }] }
+  CriminalId;
+  @UI: { lineItem:       [ { position: 20 } ],
+         identification: [{ position: 20 }],
+         selectionField: [{position: 20 }] }
+  Name;
+  @UI: { lineItem:       [ { position: 30 } ],
+         identification: [{ position: 30 }],
+         selectionField: [{position: 30 }] }
+  Dob;
+  @UI: { lineItem:       [{ position: 40 } ],
+         identification: [{ position: 40 } ] }
+  Age;
+  @UI: { lineItem:       [{ position: 50 } ],
+         identification: [{ position: 50 }] }
+  Contactno;
+  @UI: { lineItem:       [ { position: 60 } ],
+         identification: [{ position: 60 }] }
+  Location;
+  @UI.hidden: true
+  LastChangedAt;
+  @UI.hidden: true
+  LocalLastChangedAt;
+//  @UI.hidden: true
+//  /* Associations */
+//  _crime_records;
+
+}

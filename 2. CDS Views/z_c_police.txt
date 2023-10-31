@@ -1,0 +1,26 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'CDS for Police'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity z_c_police
+  as select from zpolice
+  association [0..1] to z_c_police_station as _police_station on $projection.StationId = _police_station.StationId
+{
+  key police_uuid           as PoliceUUID,
+      police_id             as PoliceId,
+      name                  as Name,
+      role                  as Role,
+      station_id            as StationId,
+      emailid               as Emailid,
+      contactno             as Contactno,
+      @Semantics.systemDateTime.lastChangedAt: true
+      last_changed_at       as LastChangedAt,
+      @Semantics.systemDateTime.localInstanceLastChangedAt: true
+      local_last_changed_at as LocalLastChangedAt,
+      _police_station
+}

@@ -1,0 +1,17 @@
+projection;
+strict ( 2 );
+
+define behavior for Z_I_CRIMINAL alias Criminal
+{
+  use create;
+  use update;
+  use delete;
+
+  use association _crime_records { create; }
+}
+
+define behavior for z_i_criminal_cases alias CriminalCases
+{
+
+  use association _criminal;
+}

@@ -1,0 +1,18 @@
+@EndUserText.label : 'Criminal_2022MT9301'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table zcriminal {
+
+  key client            : abap.clnt not null;
+  key criminal_uuid     : sysuuid_x16 not null;
+  criminal_id           : zcriminal_id not null;
+  name                  : /dmo/first_name;
+  dob                   : abap.dats;
+  contactno             : /dmo/phone_number;
+  location              : /dmo/street;
+  last_changed_at       : abp_lastchange_tstmpl;
+  local_last_changed_at : abp_locinst_lastchange_tstmpl;
+
+}

@@ -1,0 +1,52 @@
+CLASS zbp_c_court DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF z_c_court.
+ENDCLASS.
+
+CLASS zbp_c_court IMPLEMENTATION.
+ENDCLASS.
+CLASS lhc_court DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
+      IMPORTING keys REQUEST requested_authorizations FOR court RESULT result.
+
+    METHODS create_court FOR DETERMINE ON SAVE
+      IMPORTING keys FOR court~create_court.
+
+ENDCLASS.
+
+CLASS lhc_court IMPLEMENTATION.
+
+  METHOD get_instance_authorizations.
+  ENDMETHOD.
+
+  METHOD create_court.
+    " check if TravelID is already filled
+    READ ENTITIES OF z_c_court IN LOCAL MODE
+      ENTITY court
+        FIELDS ( courtId ) WITH CORRESPONDING #( keys )
+      RESULT DATA(lt_court).
+
+    " remove lines where TravelID is already filled.
+    DELETE lt_court WHERE courtId IS NOT INITIAL.
+    IF lt_court IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    " Select max travel ID
+    SELECT SINGLE MAX( courtId ) AS courtid
+        FROM  z_c_court
+        INTO @DATA(lv_maxcourt).
+*    " Set the travel ID
+    MODIFY ENTITIES OF z_c_court IN LOCAL MODE
+    ENTITY court
+      UPDATE
+        FROM VALUE #( FOR court IN lt_court INDEX INTO lv_index (
+          %tky              = court-%tky
+          courtId          = 'CT' && CONV znumc06( lv_maxcourt+2   + lv_index )
+          %control-courtId = if_abap_behv=>mk-on ) )
+          MAPPED DATA(mapped)
+    REPORTED DATA(update_reported).
+    reported = CORRESPONDING #( DEEP update_reported ).
+  ENDMETHOD.
+
+ENDCLASS.

@@ -1,0 +1,52 @@
+CLASS zbp_c_criminal DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF z_c_criminal.
+ENDCLASS.
+
+CLASS zbp_c_criminal IMPLEMENTATION.
+ENDCLASS.
+CLASS lhc_Criminal DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
+      IMPORTING keys REQUEST requested_authorizations FOR Criminal RESULT result.
+
+    METHODS create_criminal FOR DETERMINE ON SAVE
+      IMPORTING keys FOR Criminal~create_criminal.
+
+ENDCLASS.
+
+CLASS lhc_Criminal IMPLEMENTATION.
+
+  METHOD get_instance_authorizations.
+  ENDMETHOD.
+
+  METHOD create_criminal.
+    " check if TravelID is already filled
+    READ ENTITIES OF z_c_criminal IN LOCAL MODE
+      ENTITY Criminal
+        FIELDS ( CriminalId ) WITH CORRESPONDING #( keys )
+      RESULT DATA(lt_criminal).
+
+    " remove lines where TravelID is already filled.
+    DELETE lt_criminal WHERE CriminalId IS NOT INITIAL.
+    IF lt_criminal IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    " Select max travel ID
+    SELECT SINGLE MAX( CriminalId ) AS criminalid
+        FROM  z_c_criminal
+        INTO @DATA(lv_maxcrimid).
+*    " Set the travel ID
+    MODIFY ENTITIES OF z_c_criminal IN LOCAL MODE
+    ENTITY Criminal
+      UPDATE
+        FROM VALUE #( FOR criminal IN lt_criminal INDEX INTO lv_index (
+          %tky              = criminal-%tky
+          CriminalId          = 'CR' && CONV znumc06( lv_maxcrimid+2   + lv_index )
+          %control-CriminalId = if_abap_behv=>mk-on ) )
+          MAPPED DATA(mapped)
+    REPORTED DATA(update_reported).
+    reported = CORRESPONDING #( DEEP update_reported ).
+  ENDMETHOD.
+
+ENDCLASS.

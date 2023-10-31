@@ -1,0 +1,19 @@
+@EndUserText.label : 'User Records_2022MT9301'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table zuser_records {
+
+  key client            : abap.clnt not null;
+  key user_uuid         : sysuuid_x16 not null;
+  user_id               : zuser_id not null;
+  name                  : /dmo/first_name;
+  location              : /dmo/street;
+  postalcode            : /dmo/postal_code;
+  emailid               : /dmo/email_address;
+  contactno             : /dmo/phone_number;
+  last_changed_at       : abp_lastchange_tstmpl;
+  local_last_changed_at : abp_locinst_lastchange_tstmpl;
+
+}

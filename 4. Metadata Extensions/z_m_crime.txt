@@ -1,0 +1,41 @@
+@Metadata.layer: #CORE
+
+@UI: {
+    headerInfo: {
+        typeName: 'Crime',
+        typeNamePlural: 'Crimes',
+        title: {
+            type: #STANDARD,
+            label: 'Crime ID:',
+            value: 'CrimeId'
+        },
+        description: {
+            value: 'LastChangedAt'
+        }
+    }
+}
+annotate view Z_I_CRIME with
+{
+  @UI.facet: [ { id:              'Crime',
+                 purpose:         #STANDARD,
+                 type:            #IDENTIFICATION_REFERENCE,
+                 label:           'Crime Details',
+                 position:        10 } ]
+  @UI.hidden: true
+  CrimeUUID;
+  @UI: { lineItem:       [ { position: 10 } ],
+         identification: [{ position: 10 }],
+         selectionField: [{position: 10 }] }
+  CrimeId;
+  @UI: { lineItem:       [ { position: 20 } ],
+         identification: [{ position: 20 }],
+         selectionField: [{position: 20 }] }
+  Name;
+  @UI: { lineItem:       [ { position: 30 } ],
+        identification: [{ position: 30 }] }
+  Remarks;
+  @UI.hidden: true
+  LastChangedAt;
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

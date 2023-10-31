@@ -1,0 +1,107 @@
+CLASS zbp_c_police_station DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF z_c_police_station.
+ENDCLASS.
+
+CLASS zbp_c_police_station IMPLEMENTATION.
+ENDCLASS.
+CLASS lhc_police_station DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
+      IMPORTING keys REQUEST requested_authorizations FOR police_station RESULT result.
+
+    METHODS create_station FOR DETERMINE ON SAVE
+      IMPORTING keys FOR police_station~create_station.
+
+ENDCLASS.
+
+CLASS lhc_police_station IMPLEMENTATION.
+
+  METHOD get_instance_authorizations.
+  ENDMETHOD.
+
+  METHOD create_station.
+    " check if TravelID is already filled
+    READ ENTITIES OF z_c_police_station IN LOCAL MODE
+      ENTITY police_station
+        FIELDS ( StationId ) WITH CORRESPONDING #( keys )
+      RESULT DATA(lt_station).
+
+    " remove lines where TravelID is already filled.
+    DELETE lt_station WHERE stationId IS NOT INITIAL.
+    IF lt_station IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    " Select max travel ID
+    SELECT SINGLE MAX( stationId ) AS station_id
+        FROM  z_c_police_station
+        INTO @DATA(lv_maxstation).
+
+    " Set the travel ID
+    MODIFY ENTITIES OF z_c_police_station IN LOCAL MODE
+    ENTITY police_station
+      UPDATE
+        FROM VALUE #( FOR station IN lt_station INDEX INTO lv_index (
+          %tky              = station-%tky
+          stationId          = 'ST' && CONV znumc06( lv_maxstation+2   + sy-tabix )
+          %control-stationId = if_abap_behv=>mk-on ) )
+          MAPPED DATA(mapped)
+    REPORTED DATA(update_reported).
+    reported = CORRESPONDING #( DEEP update_reported ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS lhc_police DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+
+    METHODS create_police FOR DETERMINE ON SAVE
+      IMPORTING keys FOR police~create_police.
+
+ENDCLASS.
+
+CLASS lhc_police IMPLEMENTATION.
+
+  METHOD create_police.
+    DATA: lt_upolice TYPE TABLE FOR UPDATE z_c_police_station\\police.
+*    DATA update TYPE TABLE FOR UPDATE Z_C_police.
+    SELECT SINGLE MAX( policeid )
+    FROM Z_C_police
+    INTO @DATA(lv_maxpolice).
+    READ ENTITIES OF z_c_police_station IN LOCAL MODE
+        ENTITY police BY  \_police_station
+        FIELDS ( stationUUID StationId )
+        WITH CORRESPONDING #( keys )
+        RESULT DATA(lt_station).
+    LOOP AT lt_station ASSIGNING FIELD-SYMBOL(<fs_station>).
+      DATA(lv_index) = sy-tabix.
+      READ ENTITIES OF z_c_police_station IN LOCAL MODE
+        ENTITY police_station BY \_police
+          FIELDS ( policeid )
+        WITH VALUE #( ( %tky = <fs_station>-%tky ) )
+        RESULT DATA(lt_police).
+      DELETE lt_police WHERE policeid IS NOT INITIAL.
+      LOOP AT lt_police ASSIGNING FIELD-SYMBOL(<fs_police>).
+        <fs_police>-PoliceId = 'PO' && CONV znumc06( lv_maxpolice+2 + sy-tabix ).
+        <fs_police>-stationId = <fs_station>-stationId.
+        <fs_police>-stationUUID = <fs_station>-stationUUID.
+        APPEND VALUE #( %tky      = <fs_police>-%tky
+                        policeid = <fs_police>-policeid
+                        stationId = <fs_station>-stationId
+                        stationUUID = <fs_station>-stationUUID
+                      ) TO lt_upolice.
+      ENDLOOP.
+      IF lv_index IS NOT INITIAL.
+        DELETE lt_station INDEX lv_index.
+      ENDIF.
+      CLEAR: lv_index.
+    ENDLOOP.
+    MODIFY ENTITIES OF z_c_police_station IN LOCAL MODE
+    ENTITY police
+      UPDATE FIELDS ( policeid stationId stationUUID ) WITH lt_upolice
+    REPORTED DATA(update_reported).
+
+    reported = CORRESPONDING #( DEEP update_reported ).
+  ENDMETHOD.
+
+ENDCLASS.

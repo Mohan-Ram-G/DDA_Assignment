@@ -1,0 +1,20 @@
+@EndUserText.label : 'Police_2022MT93601'
+@AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
+@AbapCatalog.tableCategory : #TRANSPARENT
+@AbapCatalog.deliveryClass : #A
+@AbapCatalog.dataMaintenance : #RESTRICTED
+define table zpolice {
+
+  key client            : abap.clnt not null;
+  key police_uuid       : sysuuid_x16 not null;
+  police_id             : zpolice_id not null;
+  name                  : /dmo/first_name;
+  role                  : abap.char(50);
+  station_uuid          : sysuuid_x16;
+  station_id            : zstation_id;
+  emailid               : /dmo/email_address;
+  contactno             : /dmo/phone_number;
+  last_changed_at       : abp_lastchange_tstmpl;
+  local_last_changed_at : abp_locinst_lastchange_tstmpl;
+
+}
