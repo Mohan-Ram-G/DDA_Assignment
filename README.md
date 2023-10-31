@@ -1,6 +1,8 @@
 # DDA_Assignment
 Database Tables: Tables created in SAP HANA database to store, read, and modify.
+
 CDS Views: Virtual data models of SAP HANA that allow direct access to underlying tables of the HANA database. Annotations can be used to add metadata to the data model.
+
 CDS Projections: The top-most layer of a CDS data model that expose data of an underlying CDS view for a dedicated business use case.
 Metadata Extensions: Enables to write UI annotations for a CDS (consumption) view in a different development object to separate them from the CDS view.
 Behavior Definitions: A crucial aspect of any CDS data model that defines the actions that can be performed on the data, such as creating, updating, and deleting records.
