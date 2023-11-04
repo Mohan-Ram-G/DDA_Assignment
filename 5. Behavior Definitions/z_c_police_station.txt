@@ -5,10 +5,8 @@ define behavior for z_c_police_station alias police_station
 persistent table zpolice_station
 etag master LocalLastChangedAt
 lock master authorization master ( instance )
+early numbering
 {
-  field ( numbering : managed, readonly )
-  StationUUID;
-
   field ( readonly )
   StationId;
 
@@ -18,7 +16,6 @@ lock master authorization master ( instance )
 
   mapping for zpolice_station
     {
-      StationUUID        = station_uuid;
       StationId          = station_id;
       Name               = name;
       Location           = location;
@@ -30,7 +27,6 @@ lock master authorization master ( instance )
     }
 
   association _police { create; }
-  determination create_station on save { create; }
 }
 
 define behavior for z_c_police alias police
@@ -38,23 +34,19 @@ persistent table zpolice
 lock dependent by _police_station
 authorization dependent by _police_station
 etag master LocalLastChangedAt
+early numbering
 {
-  field ( numbering : managed, readonly )
-  PoliceUUID;
-
   field ( readonly )
-  PoliceId, StationId, StationUUID;
+  PoliceId, StationId;
 
   update;
   delete;
 
   mapping for zpolice
     {
-      PoliceUUID         = police_uuid;
       PoliceId           = police_id;
       Name               = name;
       Role               = role;
-      StationUUID        = station_uuid;
       StationId          = station_id;
       Emailid            = emailid;
       Contactno          = contactno;
@@ -63,5 +55,4 @@ etag master LocalLastChangedAt
     }
 
   association _police_station;
-  determination create_police on save { create; }
 }

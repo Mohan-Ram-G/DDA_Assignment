@@ -1,11 +1,11 @@
-@EndUserText.label: 'CDS Projection for Crime'
+@EndUserText.label: 'CDS Projection - Crime'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Metadata.allowExtensions: true
 define root view entity Z_I_CRIME
+  provider contract transactional_query
   as projection on z_c_crime
 {
-  key CrimeUUID,
-      CrimeId,
+  key CrimeId,
       Name,
       Remarks,
       LastChangedAt,

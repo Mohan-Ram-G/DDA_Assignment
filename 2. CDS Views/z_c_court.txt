@@ -1,6 +1,6 @@
+@EndUserText.label: 'CDS - Court'
 @AbapCatalog.viewEnhancementCategory: [#NONE]
 @AccessControl.authorizationCheck: #NOT_REQUIRED
-@EndUserText.label: 'CDS for Court'
 @Metadata.allowExtensions: true
 @Metadata.ignorePropagatedAnnotations: true
 @ObjectModel.usageType:{
@@ -11,9 +11,10 @@
 define root view entity z_c_court
   as select from zcourt
 {
-  key court_uuid            as CourtUUID,
+      @EndUserText.label: 'Court ID'
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_COURT', element: 'CourtId'  } }]
-      court_id              as CourtId,
+  key court_id              as CourtId,
+      @EndUserText.label: 'Court Name'
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_COURT', element: 'Name'  } }]
       name                  as Name,
       location              as Location,

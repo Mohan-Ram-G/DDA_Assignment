@@ -1,4 +1,4 @@
-@EndUserText.label : 'Crime_2022MT9301'
+@EndUserText.label : 'Database Table - Crime'
 @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
@@ -6,9 +6,8 @@
 define table zcrime {
 
   key client            : abap.clnt not null;
-  key crime_uuid        : sysuuid_x16 not null;
-  crime_id              : zcrime_id not null;
-  name                  : /dmo/filename;
+  key crime_id          : abap.char(12) not null;
+  name                  : abap.char(20);
   remarks               : abap.char(60);
   last_changed_at       : abp_lastchange_tstmpl;
   local_last_changed_at : abp_locinst_lastchange_tstmpl;

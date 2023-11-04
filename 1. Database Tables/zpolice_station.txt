@@ -1,4 +1,4 @@
-@EndUserText.label : 'Police Station_2022MT93601'
+@EndUserText.label : 'Database Table - Police Station'
 @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
@@ -6,8 +6,7 @@
 define table zpolice_station {
 
   key client            : abap.clnt not null;
-  key station_uuid      : sysuuid_x16 not null;
-  station_id            : zstation_id not null;
+  key station_id        : abap.char(12) not null;
   name                  : /dmo/title;
   location              : /dmo/street;
   postalcode            : /dmo/postal_code;

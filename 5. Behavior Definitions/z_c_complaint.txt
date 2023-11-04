@@ -4,10 +4,8 @@ define behavior for Z_C_COMPLAINT alias complaint
 persistent table zcomplaint
 etag master LocalLastChangedAt
 lock master authorization master ( instance )
+early numbering
 {
-  field ( numbering : managed, readonly )
-  ComplaintUUID;
-
   field ( readonly )
   ComplaintId, CaseId, UserId;
   create;
@@ -16,7 +14,6 @@ lock master authorization master ( instance )
 
   mapping for zcomplaint
     {
-      ComplaintUUID      = complaint_uuid;
       ComplaintId        = complaint_id;
       CaseId             = case_id;
       UserId             = user_id;
@@ -39,19 +36,18 @@ persistent table zcrime_records
 lock dependent by _complaint
 authorization dependent by _complaint
 etag master LocalLastChangedAt
+early numbering
 {
   update;
   delete;
-  field ( numbering : managed, readonly )
-  CRecordsUUID;
 
   field ( readonly )
-  ComplaintUUID, CaseId, ComplaintId;
+  CaseId, ComplaintId;
+  field ( readonly : update )
+  CriminalId;
 
   mapping for zcrime_records
     {
-      CRecordsUUID       = crecords_uuid;
-      ComplaintUUID      = complaint_uuid;
       CaseId             = case_id;
       CriminalId         = criminal_id;
       ComplaintId        = compliant_id;

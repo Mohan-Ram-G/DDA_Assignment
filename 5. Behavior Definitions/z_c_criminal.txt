@@ -5,9 +5,8 @@ define behavior for z_c_criminal alias Criminal
 persistent table zcriminal
 etag master LocalLastChangedAt
 lock master authorization master ( instance )
+early numbering
 {
-  field ( numbering : managed, readonly )
-  CriminalUUID;
 
   field ( readonly )
   CriminalId, Age;
@@ -18,7 +17,6 @@ lock master authorization master ( instance )
 
   mapping for zcriminal
     {
-      CriminalUUID       = criminal_uuid;
       CriminalId         = criminal_id;
       Name               = name;
       Dob                = dob;
@@ -27,21 +25,4 @@ lock master authorization master ( instance )
       LastChangedAt      = last_changed_at;
       LocalLastChangedAt = local_last_changed_at;
     }
-
-  association _crime_records { create; }
-  determination create_criminal on save { create; }
-}
-
-define behavior for z_c_criminal_cases alias CriminalCases
-persistent table zcrime_records
-lock dependent by _criminal
-authorization dependent by _criminal
-etag master LocalLastChangedAt
-{
-//  field ( numbering : managed, readonly )
-//  CrecordsUuid;
-
-  field ( readonly ) CriminalUUID, CrecordsUuid;
-
-  association _criminal;
 }

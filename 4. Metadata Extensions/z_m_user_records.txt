@@ -21,8 +21,6 @@ annotate view Z_I_USER_RECORDS with
                  type:            #IDENTIFICATION_REFERENCE,
                  label:           'Court Details',
                  position:        10 } ]
-  @UI.hidden: true
-  UserUUID;
   @UI: { lineItem:       [ { position: 10 } ],
          identification: [{ position: 10 }],
          selectionField: [{position: 10 }] }

@@ -1,0 +1,60 @@
+CLASS zbp_c_police_station DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF z_c_police_station.
+ENDCLASS.
+
+CLASS zbp_c_police_station IMPLEMENTATION.
+ENDCLASS.
+CLASS lhc_police_station DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
+      IMPORTING keys REQUEST requested_authorizations FOR police_station RESULT result.
+
+    METHODS earlynumbering_create FOR NUMBERING
+      IMPORTING entities FOR CREATE police_station.
+
+    METHODS earlynumbering_cba_Police FOR NUMBERING
+      IMPORTING entities FOR CREATE police_station\_Police.
+
+ENDCLASS.
+
+CLASS lhc_police_station IMPLEMENTATION.
+
+  METHOD get_instance_authorizations.
+  ENDMETHOD.
+
+  METHOD earlynumbering_create.
+    SELECT MAX( stationid )
+    FROM z_c_police_station
+    INTO @DATA(lv_stationid).
+    IF sy-subrc IS NOT INITIAL.
+      CLEAR: lv_stationid.
+    ENDIF.
+    LOOP AT entities ASSIGNING FIELD-SYMBOL(<fs_station>).
+      INSERT VALUE #( %cid       = <fs_station>-%cid
+                      stationid  = 'ST' && CONV znum10( lv_stationid+2
+                                                      + sy-tabix ) )
+                      INTO TABLE mapped-police_station.
+    ENDLOOP.
+    UNASSIGN: <fs_station>.
+  ENDMETHOD.
+
+  METHOD earlynumbering_cba_Police.
+    SELECT MAX( policeid )
+    FROM z_c_police
+    INTO @DATA(lv_policeid).
+    IF sy-subrc IS NOT INITIAL.
+      CLEAR: lv_policeid.
+    ENDIF.
+    LOOP AT entities ASSIGNING FIELD-SYMBOL(<fs_station>).
+      LOOP AT <fs_station>-%target ASSIGNING FIELD-SYMBOL(<fs_police>).
+        INSERT VALUE #( %cid     = <fs_police>-%cid
+                        policeid = 'PO' && CONV znum10( lv_policeid+2
+                                                      + sy-tabix ) )
+                        INTO TABLE mapped-police.
+      ENDLOOP.
+      UNASSIGN: <fs_police>.
+    ENDLOOP.
+    UNASSIGN: <fs_station>.
+  ENDMETHOD.
+
+ENDCLASS.

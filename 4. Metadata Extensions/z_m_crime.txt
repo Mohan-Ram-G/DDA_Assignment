@@ -21,8 +21,6 @@ annotate view Z_I_CRIME with
                  type:            #IDENTIFICATION_REFERENCE,
                  label:           'Crime Details',
                  position:        10 } ]
-  @UI.hidden: true
-  CrimeUUID;
   @UI: { lineItem:       [ { position: 10 } ],
          identification: [{ position: 10 }],
          selectionField: [{position: 10 }] }

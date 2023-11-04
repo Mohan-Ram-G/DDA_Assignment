@@ -1,4 +1,4 @@
-@EndUserText.label : 'Crime Records_2022MT9301'
+@EndUserText.label : 'Database Table - Criminal Records'
 @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
@@ -6,14 +6,12 @@
 define table zcrime_records {
 
   key client            : abap.clnt not null;
-  key crecords_uuid     : sysuuid_x16 not null;
-  complaint_uuid        : sysuuid_x16 not null;
-  case_id               : zcase_id not null;
-  criminal_id           : zcriminal_id;
-  compliant_id          : zcomplaint_id;
-  crime_id              : zcrime_id;
-  court_id              : zcourt_id;
-  police_id             : zpolice_id;
+  key case_id           : abap.char(12) not null;
+  key criminal_id       : abap.char(12) not null;
+  compliant_id          : abap.char(12);
+  crime_id              : abap.char(12);
+  court_id              : abap.char(12);
+  police_id             : abap.char(12);
   remarks               : abap.string(256);
   last_changed_at       : abp_lastchange_tstmpl;
   local_last_changed_at : abp_locinst_lastchange_tstmpl;

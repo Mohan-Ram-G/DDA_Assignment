@@ -1,11 +1,11 @@
-@EndUserText.label: 'CDS Projection for Complaint'
+@EndUserText.label: 'CDS Projection - Complaint'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Metadata.allowExtensions: true
 define root view entity Z_I_COMPLAINT
+  provider contract transactional_query
   as projection on Z_C_COMPLAINT
 {
-  key ComplaintUUID,
-      ComplaintId,
+  key ComplaintId,
       CaseId,
       UserId,
       Username,

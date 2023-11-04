@@ -1,4 +1,4 @@
-@EndUserText.label : 'Criminal_2022MT9301'
+@EndUserText.label : 'Database Table - Criminal'
 @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
@@ -6,8 +6,7 @@
 define table zcriminal {
 
   key client            : abap.clnt not null;
-  key criminal_uuid     : sysuuid_x16 not null;
-  criminal_id           : zcriminal_id not null;
+  key criminal_id       : abap.char(12) not null;
   name                  : /dmo/first_name;
   dob                   : abap.dats;
   contactno             : /dmo/phone_number;

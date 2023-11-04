@@ -1,0 +1,178 @@
+CLASS zbp_c_complaint DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF z_c_complaint.
+ENDCLASS.
+
+CLASS zbp_c_complaint IMPLEMENTATION.
+ENDCLASS.
+CLASS lhc_complaint DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
+      IMPORTING keys REQUEST requested_authorizations FOR complaint RESULT result.
+
+    METHODS earlynumbering_create FOR NUMBERING
+      IMPORTING entities FOR CREATE complaint.
+
+    METHODS earlynumbering_cba_Crime_recor FOR NUMBERING
+      IMPORTING entities FOR CREATE complaint\_Crime_records.
+
+    METHODS create_complaint FOR DETERMINE ON SAVE
+      IMPORTING keys FOR complaint~create_complaint.
+
+ENDCLASS.
+
+CLASS lhc_complaint IMPLEMENTATION.
+
+  METHOD get_instance_authorizations.
+  ENDMETHOD.
+
+  METHOD earlynumbering_create.
+    SELECT MAX( complaintid )
+    FROM z_c_complaint
+    INTO @DATA(lv_complaintid).
+    IF sy-subrc IS NOT INITIAL.
+      CLEAR: lv_complaintid.
+    ENDIF.
+    LOOP AT entities ASSIGNING FIELD-SYMBOL(<fs_complaint>).
+      INSERT VALUE #( %cid       = <fs_complaint>-%cid
+                      complaintid  = 'CP' && CONV znum10( lv_complaintid+2
+                                                      + sy-tabix ) )
+                      INTO TABLE mapped-complaint.
+    ENDLOOP.
+    UNASSIGN: <fs_complaint>.
+  ENDMETHOD.
+
+  METHOD earlynumbering_cba_Crime_recor.
+    SELECT MAX( caseid )
+    FROM z_c_crime_records
+    INTO @DATA(lv_caseid).
+    IF sy-subrc IS NOT INITIAL.
+      CLEAR: lv_caseid.
+    ENDIF.
+    LOOP AT entities ASSIGNING FIELD-SYMBOL(<fs_complaint>).
+      LOOP AT <fs_complaint>-%target ASSIGNING FIELD-SYMBOL(<fs_crime_records>).
+        INSERT VALUE #( %cid     = <fs_crime_records>-%cid
+                        caseid = 'CA' && CONV znum10( lv_caseid+2
+                                                      + sy-tabix )
+                        criminalId = <fs_crime_records>-criminalid )
+                        INTO TABLE mapped-crime_records.
+      ENDLOOP.
+      UNASSIGN: <fs_crime_records>.
+    ENDLOOP.
+    UNASSIGN: <fs_complaint>.
+  ENDMETHOD.
+
+  METHOD create_complaint.
+    " check if TravelID is already filled
+    READ ENTITIES OF z_c_complaint IN LOCAL MODE
+      ENTITY complaint
+        FIELDS ( ComplaintId ) WITH CORRESPONDING #( keys )
+      RESULT DATA(lt_complaint).
+    IF lt_complaint IS INITIAL.
+      RETURN.
+    ENDIF.
+    SELECT SINGLE * FROM z_c_user_records
+    WHERE UserId = @sy-uname
+    INTO @DATA(ls_user_record).
+    LOOP AT lt_complaint ASSIGNING FIELD-SYMBOL(<fs_comp>).
+      <fs_comp>-UserId = sy-uname.
+      <fs_comp>-Username = ls_user_record-Name.
+      IF <fs_comp>-Victimname IS INITIAL.
+        <fs_comp>-Victimname = ls_user_record-Name.
+      ENDIF.
+      IF <fs_comp>-Contactno IS INITIAL.
+        <fs_comp>-Contactno = ls_user_record-Contactno.
+      ENDIF.
+      IF <fs_comp>-Location IS INITIAL AND <fs_comp>-Postalcode IS INITIAL.
+        <fs_comp>-Location = ls_user_record-Location.
+        <fs_comp>-Postalcode = ls_user_record-Postalcode.
+      ENDIF.
+      IF <fs_comp>-Emailid IS INITIAL.
+        <fs_comp>-Emailid = ls_user_record-Emailid.
+      ENDIF.
+    ENDLOOP.
+
+    " Set the travel ID
+    MODIFY ENTITIES OF z_c_complaint IN LOCAL MODE
+    ENTITY complaint
+      UPDATE
+        FROM VALUE #( FOR complaint IN lt_complaint (
+          %tky              = complaint-%tky
+          UserId          = complaint-UserId
+          %control-UserId = if_abap_behv=>mk-on
+          Victimname = complaint-Victimname
+          %control-Victimname = if_abap_behv=>mk-on
+          Contactno = complaint-Contactno
+          %control-Contactno = if_abap_behv=>mk-on
+          Location = complaint-Location
+          %control-Location = if_abap_behv=>mk-on
+          Postalcode = complaint-Postalcode
+          %control-Postalcode = if_abap_behv=>mk-on
+          Emailid = complaint-Emailid
+          %control-Emailid = if_abap_behv=>mk-on ) )
+          MAPPED DATA(mapped)
+    REPORTED DATA(update_reported).
+    reported = CORRESPONDING #( DEEP update_reported ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS lhc_crime_records DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+
+    METHODS create_case FOR DETERMINE ON SAVE
+      IMPORTING keys FOR crime_records~create_case.
+
+ENDCLASS.
+
+CLASS lhc_crime_records IMPLEMENTATION.
+
+  METHOD create_case.
+    DATA: lt_ucrime TYPE TABLE FOR UPDATE z_c_complaint\\crime_records.
+*    DATA update TYPE TABLE FOR UPDATE Z_C_crime_records.
+    SELECT SINGLE MAX( caseid )
+    FROM Z_C_crime_records
+    INTO @DATA(lv_maxcase).
+    READ ENTITIES OF z_c_complaint IN LOCAL MODE
+        ENTITY crime_records BY  \_complaint
+        FIELDS ( ComplaintId CaseId Remarks )
+        WITH CORRESPONDING #( keys )
+        RESULT DATA(lt_comp).
+    LOOP AT lt_comp ASSIGNING FIELD-SYMBOL(<fs_comp>).
+      DATA(lv_index) = sy-tabix.
+      READ ENTITIES OF z_c_complaint IN LOCAL MODE
+        ENTITY complaint BY \_crime_records
+          FIELDS ( CaseId )
+        WITH VALUE #( ( %tky = <fs_comp>-%tky ) )
+        RESULT DATA(lt_crime).
+      IF line_exists( lt_crime[ Remarks = space ] ).
+        lt_ucrime = VALUE #( BASE lt_ucrime
+                             FOR ls_crime IN lt_crime WHERE
+                           ( Remarks EQ space )
+                           ( %tky    = ls_crime-%tky
+                             Remarks = <fs_comp>-Remarks ) ).
+      ENDIF.
+      IF <fs_comp>-CaseId IS NOT INITIAL.
+        DELETE lt_comp WHERE ComplaintId EQ <fs_comp>-ComplaintId.
+      ELSE.
+        <fs_comp>-CaseId = lt_crime[ 1 ]-CaseId.
+      ENDIF.
+    ENDLOOP.
+    IF lt_ucrime IS NOT INITIAL.
+      MODIFY ENTITIES OF z_c_complaint IN LOCAL MODE
+      ENTITY crime_records
+        UPDATE FIELDS ( Remarks ) WITH lt_ucrime
+      REPORTED DATA(update_reported).
+    ENDIF.
+    IF lt_comp IS NOT INITIAL.
+      MODIFY ENTITIES OF z_c_complaint IN LOCAL MODE
+      ENTITY complaint
+      UPDATE FIELDS ( CaseId ) WITH VALUE #( FOR ls_comp IN lt_comp
+                                           ( %tky   = ls_comp-%tky
+                                             CaseId = ls_comp-CaseId ) )
+      REPORTED DATA(lt_update_reported).
+    ENDIF.
+
+    reported = CORRESPONDING #( DEEP update_reported ).
+  ENDMETHOD.
+
+ENDCLASS.

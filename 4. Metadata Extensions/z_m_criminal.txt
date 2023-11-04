@@ -27,8 +27,6 @@ annotate view Z_I_CRIMINAL with
                  label:           'Criminal Cases',
                  position:        20,
                  targetElement:   '_crime_records'} ]
-  @UI.hidden: true
-  CriminalUUID;
   @UI: { lineItem:       [ { position: 10 } ],
          identification: [{ position: 10 }],
          selectionField: [{position: 10 }] }
@@ -54,8 +52,8 @@ annotate view Z_I_CRIMINAL with
   LastChangedAt;
   @UI.hidden: true
   LocalLastChangedAt;
-//  @UI.hidden: true
-//  /* Associations */
-//  _crime_records;
+  //  @UI.hidden: true
+  //  /* Associations */
+  //  _crime_records;
 
 }

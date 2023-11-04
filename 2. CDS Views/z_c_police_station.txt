@@ -1,16 +1,19 @@
+@EndUserText.label: 'CDS - Police Station'
 @AbapCatalog.viewEnhancementCategory: [#NONE]
 @AccessControl.authorizationCheck: #NOT_REQUIRED
-@EndUserText.label: 'CDS for Police Station'
 @Metadata.ignorePropagatedAnnotations: true
 @ObjectModel.usageType:{
     serviceQuality: #X,
     sizeCategory: #S,
     dataClass: #MIXED
 }
-define view entity z_c_police_station
+define root view entity z_c_police_station
   as select from zpolice_station
+  composition [0..*] of z_c_police as _police
 {
+      @EndUserText.label: 'Station ID'
   key station_id            as StationId,
+      @EndUserText.label: 'Station Name'
       name                  as Name,
       location              as Location,
       postalcode            as Postalcode,
@@ -19,5 +22,6 @@ define view entity z_c_police_station
       @Semantics.systemDateTime.lastChangedAt: true
       last_changed_at       as LastChangedAt,
       @Semantics.systemDateTime.localInstanceLastChangedAt: true
-      local_last_changed_at as LocalLastChangedAt
+      local_last_changed_at as LocalLastChangedAt,
+      _police
 }

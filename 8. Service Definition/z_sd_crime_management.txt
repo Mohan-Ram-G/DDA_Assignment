@@ -1,12 +1,12 @@
-@EndUserText.label: 'Crime and Fugitive Management'
-define service Z_sd_crime_management {
-  expose Z_I_COMPLAINT      as Complaint;
-  expose Z_I_COURT          as Court;
-  expose Z_I_CRIME          as Crime;
-  expose Z_I_CRIME_RECORDS  as CrimeRecords;
-  expose z_i_criminal_cases as CriminalCases;
-  expose Z_I_CRIMINAL       as Criminal;
+@EndUserText.label: 'Srv Defn. - Crime & Fugitive Management'
+define service Z_SD_CRIME_MANAGEMENT {
   expose Z_I_POLICE         as Police;
   expose Z_I_POLICE_STATION as PoliceStation;
+  expose Z_I_COMPLAINT      as Complaint;
+  expose Z_I_CRIME_RECORDS  as CrimeRecords;
   expose Z_I_USER_RECORDS   as UserRecords;
+  expose Z_I_COURT          as Court;
+  expose Z_I_CRIME          as Crime;
+  expose Z_I_CRIMINAL       as Criminal;
+  expose z_i_criminal_cases as CriminalCases;
 }

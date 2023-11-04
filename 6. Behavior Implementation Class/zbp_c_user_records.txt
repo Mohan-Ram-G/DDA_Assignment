@@ -1,0 +1,38 @@
+CLASS zbp_c_user_records DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF z_c_user_records.
+ENDCLASS.
+
+CLASS zbp_c_user_records IMPLEMENTATION.
+ENDCLASS.
+CLASS lhc_user_records DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
+      IMPORTING keys REQUEST requested_authorizations FOR user_records RESULT result.
+
+    METHODS earlynumbering_create FOR NUMBERING
+      IMPORTING entities FOR CREATE user_records.
+
+ENDCLASS.
+
+CLASS lhc_user_records IMPLEMENTATION.
+
+  METHOD get_instance_authorizations.
+  ENDMETHOD.
+
+  METHOD earlynumbering_create.
+    SELECT MAX( UserId )
+    FROM z_c_user_records
+    INTO @DATA(lv_userid).
+    IF sy-subrc IS NOT INITIAL.
+      CLEAR: lv_userid.
+    ENDIF.
+    LOOP AT entities ASSIGNING FIELD-SYMBOL(<fs_urecords>).
+      INSERT VALUE #( %cid       = <fs_urecords>-%cid
+                      UserId  = 'CB' && CONV znum10( lv_userid+2
+                                                   + sy-tabix ) )
+                      INTO TABLE mapped-user_records.
+    ENDLOOP.
+    UNASSIGN: <fs_urecords>.
+  ENDMETHOD.
+
+ENDCLASS.

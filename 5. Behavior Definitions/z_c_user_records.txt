@@ -5,10 +5,8 @@ define behavior for z_c_user_records alias user_records
 persistent table zuser_records
 etag master LocalLastChangedAt
 lock master authorization master ( instance )
+early numbering
 {
-
-  field ( numbering : managed, readonly )
-  userUUID;
 
   field ( readonly )
   UserId;
@@ -19,7 +17,6 @@ lock master authorization master ( instance )
 
   mapping for zuser_records
     {
-      userUUID           = user_uuid;
       userId             = user_id;
       Name               = name;
       Location           = location;
@@ -29,6 +26,4 @@ lock master authorization master ( instance )
       LastChangedAt      = last_changed_at;
       LocalLastChangedAt = local_last_changed_at;
     }
-
-  determination create_user on save { create; }
 }

@@ -1,6 +1,6 @@
+@EndUserText.label: 'CDS - Complaint'
 @AbapCatalog.viewEnhancementCategory: [#NONE]
 @AccessControl.authorizationCheck: #NOT_REQUIRED
-@EndUserText.label: 'CDS for Compliant'
 @Metadata.allowExtensions: true
 @ObjectModel.semanticKey: [ 'ComplaintId' ]
 @Metadata.ignorePropagatedAnnotations: true
@@ -14,9 +14,10 @@ define root view entity Z_C_COMPLAINT
   composition [0..*] of Z_C_crime_records as _crime_records
   association [0..1] to z_c_user_records  as _user_records on $projection.UserId = _user_records.UserId
 {
-  key complaint_uuid        as ComplaintUUID,
+      @EndUserText.label: 'Complaint ID'
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_COMPLAINT', element: 'ComplaintId'  } }]
-      complaint_id          as ComplaintId,
+  key complaint_id          as ComplaintId,
+      @EndUserText.label: 'Case ID'
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIME_RECORDS', element: 'CaseId'  } }]
       case_id               as CaseId,
       @EndUserText.label: 'Complainant Name'

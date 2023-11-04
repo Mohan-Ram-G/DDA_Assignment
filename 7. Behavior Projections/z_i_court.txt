@@ -1,7 +1,7 @@
 projection;
 strict ( 2 );
 
-define behavior for Z_I_COURT alias court
+define behavior for Z_I_COURT alias Court
 {
   use create;
   use update;

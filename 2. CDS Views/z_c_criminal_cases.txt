@@ -1,23 +1,22 @@
+@EndUserText.label: 'CDS - Criminal Cases'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
-@EndUserText.label: 'CDS for Criminal''s Cases'
 @Metadata.allowExtensions: true
 define view entity z_c_criminal_cases
   as select from zcrime_records as crecords
-  association        to parent z_c_criminal as _criminal      on $projection.CriminalUUID = _criminal.CriminalUUID
-  association [1..1] to z_c_criminal        as _criminal_uuid on $projection.CriminalId = _criminal_uuid.CriminalId
-  association [0..1] to Z_C_COMPLAINT       as _complaint     on $projection.ComplaintUuid = _complaint.ComplaintUUID
-  association [0..1] to z_c_crime           as _crime         on $projection.CrimeId = _crime.CrimeId
-  association [0..1] to z_c_court           as _court         on $projection.CourtId = _court.CourtId
-  association [0..1] to z_c_police          as _police        on $projection.PoliceId = _police.PoliceId
+  association        to parent z_c_criminal as _criminal  on $projection.CriminalId = _criminal.CriminalId
+  association [0..1] to Z_C_COMPLAINT       as _complaint on $projection.ComplaintId = _complaint.ComplaintId
+  association [0..1] to z_c_crime           as _crime     on $projection.CrimeId = _crime.CrimeId
+  association [0..1] to z_c_court           as _court     on $projection.CourtId = _court.CourtId
+  association [0..1] to z_c_police          as _police    on $projection.PoliceId = _police.PoliceId
 
 {
-  key crecords_uuid                                    as CrecordsUuid,
-      complaint_uuid                                   as ComplaintUuid,
+      @EndUserText.label: 'Case ID'
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIME_RECORDS', element: 'CaseId'  } }]
-      case_id                                          as CaseId,
-      _criminal_uuid.CriminalUUID                      as CriminalUUID,
+  key case_id                                          as CaseId,
+      @EndUserText.label: 'Criminal ID'
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIMINAL', element: 'CriminalId'  } }]
-      criminal_id                                      as CriminalId,
+  key criminal_id                                      as CriminalId,
+      @EndUserText.label: 'Complaint ID'
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_COMPLAINT', element: 'ComplaintId'  } }]
       compliant_id                                     as ComplaintId,
       @ObjectModel.text.element: ['CRemarks']
@@ -51,7 +50,6 @@ define view entity z_c_criminal_cases
       @Semantics.systemDateTime.localInstanceLastChangedAt: true
       local_last_changed_at                            as LocalLastChangedAt,
       _complaint,
-      _criminal_uuid,
       _criminal, // Make association public
       _crime,
       _court,

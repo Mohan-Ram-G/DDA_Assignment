@@ -1,6 +1,6 @@
+@EndUserText.label: 'CDS - Crime'
 @AbapCatalog.viewEnhancementCategory: [#NONE]
 @AccessControl.authorizationCheck: #NOT_REQUIRED
-@EndUserText.label: 'CDS for Crime'
 @Metadata.ignorePropagatedAnnotations: true
 @ObjectModel.usageType:{
     serviceQuality: #X,
@@ -10,10 +10,9 @@
 define root view entity z_c_crime
   as select from zcrime
 {
-  key crime_uuid            as CrimeUUID,
       @EndUserText.label: 'Crime ID'
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIME', element: 'CrimeId'  } }]
-      crime_id              as CrimeId,
+  key crime_id              as CrimeId,
       @EndUserText.label: 'Crime Type'
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIME', element: 'Name'  } }]
       name                  as Name,

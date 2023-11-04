@@ -22,31 +22,31 @@ annotate view z_i_criminal_cases with
                  type:            #IDENTIFICATION_REFERENCE,
                  label:           'Crime Details',
                  position:        10 } ]
-  @UI.hidden: true
-  CrecordsUuid;
-  @UI.hidden: true
-  ComplaintUuid;
-  @UI: { lineItem:       [ { position: 10 } ] }
+  @UI: { lineItem:       [ { position: 10 } ],
+         identification: [ { position: 10 } ] }
   CaseId;
-  @UI: { lineItem:       [ { position: 20 } ] }
+  @UI: { lineItem:       [ { position: 20 } ],
+         identification: [ { position: 20 } ] }
   ComplaintId;
   @UI.hidden: true
-  //  @UI: { identification: [{ position: 30, label: 'Criminal ID' }] }
   CriminalId;
   @UI.hidden: true
-  //  @UI: { identification: [{ position: 40, label: 'Crime ID' }] }
   CrimeId;
-  @UI: { lineItem:       [ { position: 40 } ] }
+  @UI: { lineItem:       [ { position: 40 } ],
+         identification: [ { position: 30 } ] }
   CType;
-  @UI: { lineItem:       [ { position: 50 } ] }
+  @UI: { lineItem:       [ { position: 50 } ],
+         identification: [ { position: 40 } ] }
   CourtId;
   @UI.hidden: true
   CourtName;
-  @UI: { lineItem:       [ { position: 60 } ] }
+  @UI: { lineItem:       [ { position: 60 } ],
+         identification: [ { position: 50 } ] }
   PoliceId;
   @UI.hidden: true
   PoliceName;
-  @UI: { lineItem:       [ { position: 70 } ] }
+  @UI: { lineItem:       [ { position: 70 } ],
+         identification: [ { position: 60 } ] }
   Remarks;
   @UI.hidden: true
   LastChangedAt;

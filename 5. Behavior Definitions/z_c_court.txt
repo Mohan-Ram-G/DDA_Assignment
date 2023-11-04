@@ -5,10 +5,8 @@ define behavior for z_c_court alias court
 persistent table zcourt
 etag master LocalLastChangedAt
 lock master authorization master ( instance )
+early numbering
 {
-
-  field ( numbering : managed, readonly )
-  CourtUUID;
 
   field ( readonly )
   CourtId;
@@ -19,7 +17,6 @@ lock master authorization master ( instance )
 
   mapping for zcourt
     {
-      CourtUUID          = court_uuid;
       CourtId            = court_id;
       Name               = name;
       Location           = location;
@@ -29,6 +26,4 @@ lock master authorization master ( instance )
       LastChangedAt      = last_changed_at;
       LocalLastChangedAt = local_last_changed_at;
     }
-
-  determination create_court on save { create; }
 }

@@ -1,4 +1,4 @@
-@EndUserText.label : 'User Records_2022MT9301'
+@EndUserText.label : 'Database Table - User Records'
 @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
@@ -6,8 +6,7 @@
 define table zuser_records {
 
   key client            : abap.clnt not null;
-  key user_uuid         : sysuuid_x16 not null;
-  user_id               : zuser_id not null;
+  key user_id           : abap.char(12) not null;
   name                  : /dmo/first_name;
   location              : /dmo/street;
   postalcode            : /dmo/postal_code;

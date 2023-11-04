@@ -1,0 +1,38 @@
+CLASS zbp_c_court DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF z_c_court.
+ENDCLASS.
+
+CLASS zbp_c_court IMPLEMENTATION.
+ENDCLASS.
+CLASS lhc_court DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
+      IMPORTING keys REQUEST requested_authorizations FOR court RESULT result.
+
+    METHODS earlynumbering_create FOR NUMBERING
+      IMPORTING entities FOR CREATE court.
+
+ENDCLASS.
+
+CLASS lhc_court IMPLEMENTATION.
+
+  METHOD get_instance_authorizations.
+  ENDMETHOD.
+
+  METHOD earlynumbering_create.
+    SELECT MAX( CourtId )
+    FROM z_c_court
+    INTO @DATA(lv_Courtid).
+    IF sy-subrc IS NOT INITIAL.
+      CLEAR: lv_courtid.
+    ENDIF.
+    LOOP AT entities ASSIGNING FIELD-SYMBOL(<fs_court>).
+      INSERT VALUE #( %cid       = <fs_court>-%cid
+                      courtId  = 'CT' && CONV znum10( lv_courtid+2
+                                                      + sy-tabix ) )
+                      INTO TABLE mapped-court.
+    ENDLOOP.
+    UNASSIGN: <fs_court>.
+  ENDMETHOD.
+
+ENDCLASS.

@@ -1,4 +1,4 @@
-@EndUserText.label : 'Police_2022MT93601'
+@EndUserText.label : 'Database Table - Police Station'
 @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
@@ -6,12 +6,10 @@
 define table zpolice {
 
   key client            : abap.clnt not null;
-  key police_uuid       : sysuuid_x16 not null;
-  police_id             : zpolice_id not null;
+  key police_id         : abap.char(12) not null;
   name                  : /dmo/first_name;
-  role                  : abap.char(50);
-  station_uuid          : sysuuid_x16;
-  station_id            : zstation_id;
+  role                  : /dmo/title;
+  station_id            : abap.char(12);
   emailid               : /dmo/email_address;
   contactno             : /dmo/phone_number;
   last_changed_at       : abp_lastchange_tstmpl;

@@ -22,8 +22,6 @@ annotate view Z_I_COURT with
                  type:            #IDENTIFICATION_REFERENCE,
                  label:           'Court Details',
                  position:        10 } ]
-  @UI.hidden: true
-  CourtUUID;
   @UI: { lineItem:       [ { position: 10 } ],
          identification: [{ position: 10 }],
          selectionField: [{position: 10 }] }

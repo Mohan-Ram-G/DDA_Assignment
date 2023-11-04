@@ -1,6 +1,6 @@
+@EndUserText.label: 'CDS - Police'
 @AbapCatalog.viewEnhancementCategory: [#NONE]
 @AccessControl.authorizationCheck: #NOT_REQUIRED
-@EndUserText.label: 'CDS for Police'
 @Metadata.ignorePropagatedAnnotations: true
 @ObjectModel.usageType:{
     serviceQuality: #X,
@@ -9,12 +9,15 @@
 }
 define view entity z_c_police
   as select from zpolice
-  association [0..1] to z_c_police_station as _police_station on $projection.StationId = _police_station.StationId
+  association to parent z_c_police_station as _police_station on $projection.StationId = _police_station.StationId
 {
-  key police_uuid           as PoliceUUID,
-      police_id             as PoliceId,
+      @EndUserText.label: 'Police ID'
+  key police_id             as PoliceId,
+      @EndUserText.label: 'Police Name'
       name                  as Name,
+      @EndUserText.label: 'Position'
       role                  as Role,
+      @EndUserText.label: 'Station ID'
       station_id            as StationId,
       emailid               as Emailid,
       contactno             as Contactno,

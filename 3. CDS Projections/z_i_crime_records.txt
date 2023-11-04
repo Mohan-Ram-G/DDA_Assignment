@@ -1,14 +1,12 @@
-@EndUserText.label: 'CDS Projection for Crime Records'
+@EndUserText.label: 'CDS Projection - Crime'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Metadata.allowExtensions: true
 define view entity Z_I_CRIME_RECORDS
   as projection on Z_C_crime_records
 {
-  key CRecordsUUID,
-      ComplaintUUID,
-      CaseId,
+  key CaseId,
+  key CriminalId,
       ComplaintId,
-      CriminalId,
       CrimeId,
       CriminalName,
       CType,

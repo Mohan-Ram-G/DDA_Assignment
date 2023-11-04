@@ -1,0 +1,38 @@
+CLASS zbp_c_criminal DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF z_c_criminal.
+ENDCLASS.
+
+CLASS zbp_c_criminal IMPLEMENTATION.
+ENDCLASS.
+CLASS lhc_Criminal DEFINITION INHERITING FROM cl_abap_behavior_handler.
+  PRIVATE SECTION.
+
+    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
+      IMPORTING keys REQUEST requested_authorizations FOR Criminal RESULT result.
+
+    METHODS earlynumbering_create FOR NUMBERING
+      IMPORTING entities FOR CREATE Criminal.
+
+ENDCLASS.
+
+CLASS lhc_Criminal IMPLEMENTATION.
+
+  METHOD get_instance_authorizations.
+  ENDMETHOD.
+
+  METHOD earlynumbering_create.
+    SELECT MAX( CriminalId )
+    FROM z_c_criminal
+    INTO @DATA(lv_CriminalId).
+    IF sy-subrc IS NOT INITIAL.
+      CLEAR: lv_criminalid.
+    ENDIF.
+    LOOP AT entities ASSIGNING FIELD-SYMBOL(<fs_criminal>).
+      INSERT VALUE #( %cid       = <fs_criminal>-%cid
+                      criminalId = 'CT' && CONV znum10( lv_criminalid+2
+                                                      + sy-tabix ) )
+                      INTO TABLE mapped-criminal.
+    ENDLOOP.
+    UNASSIGN: <fs_criminal>.
+  ENDMETHOD.
+
+ENDCLASS.

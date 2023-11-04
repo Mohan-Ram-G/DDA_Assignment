@@ -22,20 +22,17 @@ annotate view Z_I_CRIME_RECORDS with
                  type:            #IDENTIFICATION_REFERENCE,
                  label:           'Crime Details',
                  position:        10 } ]
-  @UI.hidden: true
-  CRecordsUUID;
-  @UI.hidden: true
-  ComplaintUUID;
   @UI: { lineItem:       [ { position: 10 } ],
          identification: [{ position: 10 }],
          selectionField: [{ position: 10 }] }
   CaseId;
   @UI: { lineItem:       [ { position: 20 } ],
-         identification: [{ position: 20 }] }
-  ComplaintId;
-  @UI: { lineItem:       [ { position: 30 } ],
-         identification: [{ position: 30, label: 'Criminal ID' }] }
+         identification: [{ position: 20, label: 'Criminal ID' }] }
   CriminalId;
+  @UI: { lineItem:       [ { position: 30 } ],
+         identification: [{ position: 30 }],
+         hidden: true }
+  ComplaintId;
   @UI: { identification: [{ position: 40, label: 'Crime ID' }] }
   CrimeId;
   @UI: { lineItem:       [ { position: 40 } ],

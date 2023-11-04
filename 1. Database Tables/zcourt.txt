@@ -1,4 +1,4 @@
-@EndUserText.label : 'Court_2022MT9301'
+@EndUserText.label : 'Database Table - Court'
 @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
@@ -6,9 +6,8 @@
 define table zcourt {
 
   key client            : abap.clnt not null;
-  key court_uuid        : sysuuid_x16 not null;
-  court_id              : zcourt_id not null;
-  name                  : /dmo/title;
+  key court_id          : abap.char(12) not null;
+  name                  : /dmo/first_name;
   location              : /dmo/street;
   postalcode            : /dmo/postal_code;
   emailid               : /dmo/email_address;

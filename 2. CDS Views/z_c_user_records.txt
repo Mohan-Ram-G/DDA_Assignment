@@ -1,6 +1,6 @@
+@EndUserText.label: 'CDS - User Records'
 @AbapCatalog.viewEnhancementCategory: [#NONE]
 @AccessControl.authorizationCheck: #NOT_REQUIRED
-@EndUserText.label: 'CDS for User Records'
 @Metadata.ignorePropagatedAnnotations: true
 @ObjectModel.usageType:{
     serviceQuality: #X,
@@ -10,9 +10,9 @@
 define root view entity z_c_user_records
   as select from zuser_records
 {
-  key user_uuid             as UserUUID,
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_USER_RECORDS', element: 'UserId'  } }]
-      user_id               as UserId,
+      @EndUserText.label: 'User ID'
+  key user_id               as UserId,
       @EndUserText.label: 'User Name'
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_USER_RECORDS', element: 'Name'  } }]
       name                  as Name,

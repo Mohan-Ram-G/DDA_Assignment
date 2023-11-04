@@ -21,8 +21,6 @@ annotate view Z_I_POLICE with
                  type:            #IDENTIFICATION_REFERENCE,
                  label:           'Police Details',
                  position:        10 } ]
-  @UI.hidden: true
-  PoliceUUID;
   @UI: { lineItem:       [ { position: 10 } ],
          identification: [{ position: 10 }] }
   PoliceId;
@@ -32,15 +30,13 @@ annotate view Z_I_POLICE with
   @UI: { lineItem:       [ { position: 30 } ],
          identification: [{ position: 30 }] }
   Role;
-  @UI.hidden: true
-  StationUUID;
-  @UI.hidden: true
+  @UI: { identification: [{ position: 40 }] }
   StationId;
   @UI: { lineItem:       [ { position: 40 } ],
-         identification: [{ position: 40 }] }
+         identification: [{ position: 50 }] }
   Emailid;
   @UI: { lineItem:       [ { position: 50 } ],
-         identification: [{ position: 50 }] }
+         identification: [{ position: 60 }] }
   Contactno;
   @UI.hidden: true
   LastChangedAt;

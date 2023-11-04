@@ -1,4 +1,4 @@
-@EndUserText.label : 'Complaint_2022MT9301'
+@EndUserText.label : 'Database Table - Complaint'
 @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
@@ -6,12 +6,10 @@
 define table zcomplaint {
 
   key client            : abap.clnt not null;
-  key complaint_uuid    : sysuuid_x16 not null;
-  complaint_id          : zcomplaint_id not null;
-  case_id               : zcase_id;
-  user_id               : zuser_id;
+  key complaint_id      : abap.char(12) not null;
+  case_id               : abap.char(12);
+  user_id               : abap.char(12);
   victimname            : /dmo/first_name;
-  no_of_accused         : abap.numc(4);
   remarks               : abap.string(256);
   location              : /dmo/street;
   postalcode            : /dmo/postal_code;

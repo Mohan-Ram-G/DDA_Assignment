@@ -1,11 +1,11 @@
-@EndUserText.label: 'CDS Projection for Police Station'
+@EndUserText.label: 'CDS Projection - Police Station'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Metadata.allowExtensions: true
 define root view entity Z_I_POLICE_STATION
+  provider contract transactional_query
   as projection on z_c_police_station
 {
-  key StationUUID,
-      StationId,
+  key StationId,
       Name,
       Location,
       Postalcode,
@@ -14,5 +14,5 @@ define root view entity Z_I_POLICE_STATION
       LastChangedAt,
       LocalLastChangedAt,
       /* Associations */
-      _police : redirected to composition child z_i_police
+      _police : redirected to composition child Z_I_POLICE
 }

@@ -1,6 +1,6 @@
+@EndUserText.label: 'CDS - Crime Records'
 @AbapCatalog.viewEnhancementCategory: [#NONE]
 @AccessControl.authorizationCheck: #NOT_REQUIRED
-@EndUserText.label: 'CDS for Crime Records'
 @Metadata.allowExtensions: true
 @ObjectModel.semanticKey: [ 'CaseId' ]
 @Metadata.ignorePropagatedAnnotations: true
@@ -11,22 +11,22 @@
 }
 define view entity Z_C_crime_records
   as select from zcrime_records
-  association        to parent Z_C_COMPLAINT as _complaint on $projection.ComplaintUUID = _complaint.ComplaintUUID
+  association        to parent Z_C_COMPLAINT as _complaint on $projection.ComplaintId = _complaint.ComplaintId
   association [0..1] to z_c_crime            as _crime     on $projection.CrimeId = _crime.CrimeId
-  association [0..*] to z_c_criminal         as _criminal  on $projection.CriminalId = _criminal.CriminalId
+  association [0..1] to z_c_criminal         as _criminal  on $projection.CriminalId = _criminal.CriminalId
   association [0..1] to z_c_court            as _court     on $projection.CourtId = _court.CourtId
   association [0..1] to z_c_police           as _police    on $projection.PoliceId = _police.PoliceId
 {
-  key crecords_uuid                                    as CRecordsUUID,
-      complaint_uuid                                   as ComplaintUUID,
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIME_RECORDS', element: 'CaseId'  } }]
-      case_id                                          as CaseId,
-      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_COMPLAINT', element: 'ComplaintId'  } }]
-      compliant_id                                     as ComplaintId,
+      @EndUserText.label: 'Case ID'
+  key case_id                                          as CaseId,
       @EndUserText.label: 'Criminal Name'
       @ObjectModel.text.element: ['CriminalName']
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIMINAL', element: 'CriminalId'  } }]
-      criminal_id                                      as CriminalId,
+  key criminal_id                                      as CriminalId,
+      @EndUserText.label: 'Complaint ID'
+      @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_COMPLAINT', element: 'ComplaintId'  } }]
+      compliant_id                                     as ComplaintId,
       @ObjectModel.text.element: ['CRemarks']
       @EndUserText.label: 'Crime Name'
       @Consumption.valueHelpDefinition: [{ entity : {name: 'Z_C_CRIME', element: 'CrimeId'  } }]
