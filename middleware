@@ -1,0 +1,125 @@
+1.	Which pattern makes channels persistent so that their messages are stored on disk
+a.	Guaranteed Cash
+b.	Guaranteed Car
+c.	Guaranteed Receipt
+d.	Guaranteed Delivery
+2.	The default type of message, used as both the request and the reply is 
+a.	Algorithm Message
+b.	Document Message
+c.	Body Message
+d.	Alert Message
+3.	Below is not a web services task
+a.	Bind/Interact
+b.	Tolerate
+c.	Find
+d.	Publish
+4.	To send the data to a single application we should use
+a.	Point-to-Club Channel
+b.	Point-to-Main Channel
+c.	Point-to-Nut Channel
+d.	Point-to-Point Channel
+5.	Below is not a Web Service Role
+a.	Service Rejection
+b.	Service Registry
+c.	Service Requestor
+d.	Service Provider
+6.	Below is a messaging transformation pattern
+a.	Message Translator
+b.	Message Bus
+c.	Message History
+d.	Message Store
+7.	What filters out messages with wrong content
+a.	message filter
+b.	Data filter
+c.	Water filter
+d.	Code filter
+8.	A router that can self-configure based on special configuration messages from participating destinations
+a.	Service Registry
+b.	Service Detour
+c.	Dynamic Router
+d.	Service Router
+9.	UDDI means
+a.	United Description, Discovery and Indication
+b.	United Description, Discovery and Integration
+c.	Universal Description, Discovery and Integration
+d.	Universal Description, Discovery and Indication
+10.	Below channel is used for messages which are successfully sent but ultimately cannot be successfully delivered
+a.	Dead Woman Channel
+b.	Dead Letter Channel
+c.	Dead Man Channel
+d.	Dead Body Channel
+11.	EAI means
+a.	Enterprise application integration
+b.	Enterprise application initials
+c.	Enterprise application initiation
+d.	Enterprise application irrigation
+12.	SOA means
+a.	Service Oriented Architecture
+b.	Service Oriented Assignment
+c.	Source Oriented Assignment
+d.	Service Oriented Animal
+13.	The principle that all of the data on a channel has to be of the same type.
+a.	Datamain Channel
+b.	Datapoint Channel
+c.	Database Channel
+d.	Datatype Channel
+14.	Below is not a benefit of SOA
+a.	The services model mimics business needs better than objects or resources
+b.	Allows you to leverage existing IT assets
+c.	Loose coupling between consumer and provide
+d.	Does not allows you to leverage existing IT assets
+15.	WSDL means
+a.	Web Services Description Language
+b.	Web Services Description Luggage
+c.	Web Services Description Loyal
+d.	Web Services Description Local
+16.	JMS in Java stack means
+a.	Java Message Source
+b.	Java Message Service
+c.	Java Message Sun
+d.	Java Message Sound
+17.	Below is not an application integration option
+a.	Remote Procedure Invocation
+b.	File Transfer
+c.	Phone call
+d.	Shared Database
+18.	ESB means
+a.	Enterprise Service bay
+b.	Enterprise Service bench
+c.	Enterprise Service boy
+d.	Enterprise Service Bus
+19.	Below is a messaging endpoints pattern
+a.	Message Store
+b.	Service Activator
+c.	Message History
+d.	Message Bus
+20.	Amazon's SQS means
+a.	Amazon's Simple Queuing Sun
+b.	Amazon's Simple Queuing Sales
+c.	Amazon's Simple Queuing Solar
+d.	Amazon's Simple Queuing Service
+21.	RPC means
+a.	Residue Procedure Call
+b.	Remote Procedure Call
+c.	Remote Procedure Create
+d.	Remote Problem Call
+22.	SOAP means
+a.	Simple Object Adequate Protocol
+b.	Simple Object Acute Protocol
+c.	Simple Object Allocate Protocol
+d.	Simple Object Access Protocol
+23.	Below is a messaging channel pattern
+a.	Message Purger
+b.	Message bus
+c.	Message Store
+d.	Message History
+24.	Below is a messaging routing pattern
+a.	Control bus
+b.	Aggregator
+c.	Message History
+d.	Message channel
+25.	Below is a messaging construction pattern
+a.	Event message
+b.	Message channel
+c.	Smart Proxy
+d.	Wire Tap
